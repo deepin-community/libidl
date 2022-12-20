@@ -1,0 +1,7 @@
+debian/tmp/usr/include
+debian/tmp/usr/lib/*/*.so
+debian/tmp/usr/lib/*/*.a
+debian/tmp/usr/lib/*/pkgconfig
+debian/tmp/usr/share/info/libIDL2.info
+debian/libIDL-config-2 usr/bin
+

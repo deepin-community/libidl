@@ -1,0 +1,59 @@
+#! /bin/sh
+usage()
+{
+	cat <<EOF
+Usage: libIDL-config [OPTIONS]
+Options:
+	[--prefix]
+	[--exec-prefix]
+	[--version]
+	[--libs]
+	[--cflags]
+EOF
+	exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
+fi
+
+call_pkgconfig=no
+pkgconfig_flags=
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --prefix)
+      pkg-config --variable=prefix libIDL-2.0
+      ;;
+    --exec-prefix)
+      pkg-config --variable=exec_prefix libIDL-2.0
+      ;;
+    --version)
+      pkg-config --modversion libIDL-2.0
+      exit 0
+      ;;
+    --cflags)
+      call_pkgconfig=yes
+      pkgconfig_flags="$pkgconfig_flags --cflags"
+      ;;
+    --libs)
+      call_pkgconfig=yes
+      pkgconfig_flags="$pkgconfig_flags --libs"
+      ;;
+    *)
+      usage 1 1>&2
+      ;;
+  esac
+  shift
+done
+
+if test "$call_pkgconfig" = "yes"; then
+	exec pkg-config $pkgconfig_flags libIDL-2.0
+fi
+
+exit 0
